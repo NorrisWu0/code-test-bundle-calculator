@@ -9,7 +9,8 @@ public class Bundle {
     private int size;
     private double price;
 
-    public boolean isApplicable(int quantityRequired) {
-        return quantityRequired > size;
+    @Override
+    public String toString() {
+        return size + " pack bundle (value: $" + price + ")";
     }
 }
