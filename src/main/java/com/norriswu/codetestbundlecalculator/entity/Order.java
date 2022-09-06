@@ -1,5 +1,6 @@
 package com.norriswu.codetestbundlecalculator.entity;
 
+import com.norriswu.codetestbundlecalculator.utils.Logger;
 import lombok.Getter;
 
 @Getter
@@ -10,13 +11,18 @@ public class Order {
     public Order(String[] orderInfo) {
         try {
             this.quantity = Integer.parseInt(orderInfo[0]);
-            this.formatCode = orderInfo[1];
+            this.formatCode = orderInfo[1].toUpperCase();
         } catch (NumberFormatException exception) {
-            System.out.println(String.format("Ocelot: Boss, \"%s\" is not a number.", orderInfo[0]));
-            exception.printStackTrace();
+            Logger.info(String.format("Boss, \"%s\" is not a number.", orderInfo[0]));
+            System.exit(1);
         } catch (ArrayIndexOutOfBoundsException exception) {
-            System.out.println("Ocelot: Boss, you need to tell me what do you need.");
-            exception.printStackTrace();
+            Logger.info("Boss, you need to tell me what do you need.");
+            System.exit(1);
         }
+    }
+
+    @Override
+    public String toString() {
+        return quantity + " " + formatCode;
     }
 }
