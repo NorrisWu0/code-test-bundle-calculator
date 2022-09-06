@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 public class CustomHelper {
 
+    /**
+     * Apology to whoever provided this on stack overflow, I forgot to include your link here. 🙇
+     */
     public static <T> Collector<T, ?, T> toSingleton() {
         return Collectors.collectingAndThen(
                 Collectors.toList(),
@@ -18,6 +21,9 @@ public class CustomHelper {
         );
     }
 
+    /**
+     * Shamelessly stolen from <a href="https://stackoverflow.com/questions/15217438/counting-occurrences-of-a-key-in-a-map-in-java">counting-occurrences-of-a-key-in-a-map-in-java</a>
+     */
     public static <K> void count(K key, Map<K, Integer> map) {
         map.merge(key, 1, (currentCount, notUsed) -> ++currentCount);
     }
