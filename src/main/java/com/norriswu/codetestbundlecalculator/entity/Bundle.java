@@ -11,6 +11,6 @@ public class Bundle {
 
     @Override
     public String toString() {
-        return size + " pack bundle (value: $" + price + ")";
+        return size + " pack bundle (pp: $" + price + ")";
     }
 }
