@@ -32,37 +32,37 @@ public class CustomHelper {
         map.merge(key, 1, (currentCount, notUsed) -> ++currentCount);
     }
 
-    public static List<Integer> findBestCombinationOfNumberGivenList(int required, int remaining, List<Integer> list, int startIndex, int currentIndex, List<Integer> combination) {
-        List<Integer> _combination = new ArrayList<>(combination);
-        int _nextBundleIndex = currentIndex;
+    public static List<Integer> findBestCombinationOfNumberGivenList(int required, int currentRemaining, List<Integer> list, int startIndex, int currentIndex, List<Integer> currentCombination) {
+        List<Integer> combination = new ArrayList<>(currentCombination);
+        int nextBundleIndex = currentIndex;
 
-        if (remaining == 0) return _combination;
+        if (currentRemaining == 0) return combination;
 
-        boolean exhaustedPossibleCombinationWithStartingIndex = remaining > 0 && currentIndex == list.size();
+        boolean exhaustedPossibleCombinationWithStartingIndex = currentRemaining > 0 && currentIndex == list.size();
         if (exhaustedPossibleCombinationWithStartingIndex) {
-            int _startingBundleIndex = startIndex + 1;
-            return findBestCombinationOfNumberGivenList(required, required, list, _startingBundleIndex, _startingBundleIndex, List.of());
+            int startingBundleIndex = startIndex + 1;
+            return findBestCombinationOfNumberGivenList(required, required, list, startingBundleIndex, startingBundleIndex, List.of());
         }
 
-        int _remaining = remaining - list.get(currentIndex);
+        int remaining = currentRemaining - list.get(currentIndex);
 
-        if (_remaining < 0) {
+        if (remaining < 0) {
             if (startIndex == list.size() - 1) {
                 return List.of();
             }
-            _nextBundleIndex++;
-            _remaining = remaining;
+            nextBundleIndex++;
+            remaining = currentRemaining;
         } else {
-            _combination.add(currentIndex);
+            combination.add(currentIndex);
         }
 
         return findBestCombinationOfNumberGivenList(
                 required,
-                _remaining,
+                remaining,
                 list,
                 startIndex,
-                _nextBundleIndex,
-                _combination
+                nextBundleIndex,
+                combination
         );
     }
 }
