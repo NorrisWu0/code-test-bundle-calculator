@@ -4,6 +4,7 @@ import com.norriswu.codetestbundlecalculator.entity.Bundle;
 import com.norriswu.codetestbundlecalculator.entity.Order;
 import com.norriswu.codetestbundlecalculator.entity.Product;
 import com.norriswu.codetestbundlecalculator.utils.CustomHelper;
+import com.norriswu.codetestbundlecalculator.utils.JSON;
 import com.norriswu.codetestbundlecalculator.utils.Logger;
 import lombok.AllArgsConstructor;
 
@@ -21,7 +22,7 @@ public class BundleCalculator {
         Logger.info("Let's see if we have it in stock, gimme a sec...");
 
         Product matchedProduct = checkProductAvailability(order);
-        List<Bundle> bestBundleCombination = findBestBundleCombination(order.getQuantity(), order.getQuantity(), matchedProduct.getBundles(), 0, 0, List.of());
+        List<Bundle> bestBundleCombination = findBestBundleCombination(order, matchedProduct.getBundles());
 
         if (!bestBundleCombination.equals(List.of())) {
             generateResponse(order, bestBundleCombination);
@@ -50,39 +51,13 @@ public class BundleCalculator {
         }
     }
 
-    private List<Bundle> findBestBundleCombination(int required, int remaining, List<Bundle> bundles, int startingBundleIndex, int currentBundleIndex, List<Bundle> combination) {
-        List<Bundle> _combination = new ArrayList<>(combination);
+    private List<Bundle> findBestBundleCombination(Order order, List<Bundle> bundles) {
+        List<Integer> sizeOfBundles = bundles.stream().map(Bundle::getSize).collect(Collectors.toList());
+        Logger.info(JSON.stringify("Size of bundles " + sizeOfBundles));
+        List<Integer> bundleIndexCombination = CustomHelper.findBestCombinationOfNumberGivenList(order.getQuantity(), order.getQuantity(), sizeOfBundles, 0, 0, List.of());
+        Logger.info(JSON.stringify("Bundle index combination " + bundleIndexCombination));
 
-        int _nextBundleIndex = currentBundleIndex;
-
-        if (remaining == 0) return _combination;
-
-        boolean exhaustedPossibleCombinationWithStartingBundleIndex = remaining > 0 && currentBundleIndex == bundles.size();
-        if (exhaustedPossibleCombinationWithStartingBundleIndex) {
-            int _startingBundleIndex = startingBundleIndex + 1;
-            return findBestBundleCombination(required, required, bundles, _startingBundleIndex, _startingBundleIndex, List.of());
-        }
-
-        int _remaining = remaining - bundles.get(currentBundleIndex).getSize();
-
-        if (_remaining < 0) {
-            if (startingBundleIndex == bundles.size() - 1) {
-                return List.of();
-            }
-            _nextBundleIndex++;
-            _remaining = remaining;
-        } else {
-            _combination.add(bundles.get(currentBundleIndex));
-        }
-
-        return findBestBundleCombination(
-                required,
-                _remaining,
-                bundles,
-                startingBundleIndex,
-                _nextBundleIndex,
-                _combination
-        );
+        return bundleIndexCombination.stream().map(bundles::get).collect(Collectors.toList());
     }
 
     private double calculateTotalOfBundles(List<Bundle> bundles) {
