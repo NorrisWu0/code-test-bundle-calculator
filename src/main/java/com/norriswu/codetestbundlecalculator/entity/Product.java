@@ -10,11 +10,4 @@ import java.util.List;
 public class Product {
     private String formatCode;
     private List<Bundle> bundles;
-
-    public void getProductInformation() {
-    }
-
-    public Bundle[] findLeastCostOfBundleCombination(Integer total) {
-        return new Bundle[0];
-    }
 }
