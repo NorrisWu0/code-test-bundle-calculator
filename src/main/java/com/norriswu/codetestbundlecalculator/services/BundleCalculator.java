@@ -53,9 +53,7 @@ public class BundleCalculator {
 
     private List<Bundle> findBestBundleCombination(Order order, List<Bundle> bundles) {
         List<Integer> sizeOfBundles = bundles.stream().map(Bundle::getSize).collect(Collectors.toList());
-        Logger.info(JSON.stringify("Size of bundles " + sizeOfBundles));
         List<Integer> bundleIndexCombination = CustomHelper.findBestCombinationOfNumberGivenList(order.getQuantity(), order.getQuantity(), sizeOfBundles, 0, 0, List.of());
-        Logger.info(JSON.stringify("Bundle index combination " + bundleIndexCombination));
 
         return bundleIndexCombination.stream().map(bundles::get).collect(Collectors.toList());
     }
