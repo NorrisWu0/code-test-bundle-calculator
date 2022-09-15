@@ -31,12 +31,6 @@ public class BundleCalculator {
         }
     }
 
-    private Order readOrderFromUser() {
-        Logger.info("What do you need boss? Let me know in this format 👉 \"15 IMG\"");
-        Scanner sc = new Scanner(System.in);
-        return new Order(sc.nextLine().split(" "));
-    }
-
     private Product checkProductAvailability(Order order) {
         try {
             Product product = products.stream().filter(_product -> order.getFormatCode().equals(_product.getFormatCode())).collect(CustomHelper.toSingleton());
