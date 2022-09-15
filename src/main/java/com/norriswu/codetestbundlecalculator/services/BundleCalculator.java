@@ -31,18 +31,6 @@ public class BundleCalculator {
         }
     }
 
-    private Product checkProductAvailability(Order order) {
-        try {
-            Product product = products.stream().filter(_product -> order.getFormatCode().equals(_product.getFormatCode())).collect(CustomHelper.toSingleton());
-            Logger.info(String.format("Got it, we do have %s in our line up", order.getFormatCode()));
-            Logger.info("Let's find you a good deal.");
-
-            return product;
-        } catch (IllegalStateException exception) {
-            Logger.info(String.format("Sorry boss, I don't think we have %s in our stock", order.getFormatCode()));
-            System.exit(1);
-            return null;
-        }
     }
 
     private List<Bundle> findBestBundleCombination(Order order, List<Bundle> bundles) {
@@ -66,6 +54,5 @@ public class BundleCalculator {
 
         Logger.info("Getting you " + order + " will cost $" + total);
         Logger.info("Which is a combination of " + combinationString);
-    }
 
 }
