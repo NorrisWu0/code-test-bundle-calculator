@@ -1,47 +1,26 @@
 package com.norriswu.codetestbundlecalculator.entity;
 
-import com.norriswu.codetestbundlecalculator.utils.CustomHelper;
-import com.norriswu.codetestbundlecalculator.utils.Logger;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-import java.util.HashMap;
+import java.text.NumberFormat;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-@Data
+@Getter
+@AllArgsConstructor
 public class Order {
-    private int quantity;
-    private String formatCode;
-    private List<Bundle> matchedBundles;
-
-    public Order(String[] orderInfo) {
-        try {
-            this.quantity = Integer.parseInt(orderInfo[0]);
-            this.formatCode = orderInfo[1].toUpperCase();
-        } catch (NumberFormatException exception) {
-            Logger.info(String.format("Boss, \"%s\" is not a number.", orderInfo[0]));
-            System.exit(1);
-        } catch (ArrayIndexOutOfBoundsException exception) {
-            Logger.info("Boss, you need to tell me what do you need.");
-            System.exit(1);
-        }
-    }
+    private List<OrderItem> items;
 
     @Override
     public String toString() {
-        return quantity + " " + formatCode;
+        return items
+                .stream()
+                .map(OrderItem::toString).collect(Collectors.joining(", "));
     }
 
-    public double getTotal() {
-        return matchedBundles.stream().mapToDouble(Bundle::getPrice).sum();
+    public void getSummary() {
+        double total = items.stream().mapToDouble(OrderItem::getTotal).sum();
+        return "This order comes in at a whooping " + NumberFormat.getCurrencyInstance().format(total);
     }
-
-    public String getBundleInfo() {
-        Map<String, Integer> bundleMap = new HashMap<>();
-        matchedBundles.forEach(bundle -> new CustomHelper().count(bundle.toString(), bundleMap));
-
-        return bundleMap.keySet().stream().map(bundle -> bundleMap.get(bundle) + " x " + bundle).collect(Collectors.joining(", "));
-    }
-
 }
