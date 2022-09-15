@@ -10,7 +10,7 @@ import com.norriswu.codetestbundlecalculator.utils.Logger;
 
 import java.util.List;
 
-public class Main {
+public class MediaStoreApplication {
     private static final Product img = new Product("IMG", List.of(new Bundle(10, 800), new Bundle(5, 450)));
     private static final Product flac = new Product("FLAC", List.of(new Bundle(9, 1147.5), new Bundle(6, 810), new Bundle(3, 427.5)));
     private static final Product vid = new Product("VID", List.of(new Bundle(9, 1530), new Bundle(5, 900), new Bundle(3, 570)));
