@@ -16,9 +16,6 @@ public class Main {
         calculator.init();
     }
 
-    public static String greeting(String name) {
-        return String.format("Hello %s!", name);
-    }
 
 
 }
