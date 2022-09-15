@@ -1,12 +1,19 @@
 package com.norriswu.codetestbundlecalculator.entity;
 
+import com.norriswu.codetestbundlecalculator.utils.CustomHelper;
 import com.norriswu.codetestbundlecalculator.utils.Logger;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@Data
 public class Order {
     private int quantity;
     private String formatCode;
+    private List<Bundle> matchedBundles;
 
     public Order(String[] orderInfo) {
         try {
@@ -25,4 +32,16 @@ public class Order {
     public String toString() {
         return quantity + " " + formatCode;
     }
+
+    public double getTotal() {
+        return matchedBundles.stream().mapToDouble(Bundle::getPrice).sum();
+    }
+
+    public String getBundleInfo() {
+        Map<String, Integer> bundleMap = new HashMap<>();
+        matchedBundles.forEach(bundle -> new CustomHelper().count(bundle.toString(), bundleMap));
+
+        return bundleMap.keySet().stream().map(bundle -> bundleMap.get(bundle) + " x " + bundle).collect(Collectors.joining(", "));
+    }
+
 }
