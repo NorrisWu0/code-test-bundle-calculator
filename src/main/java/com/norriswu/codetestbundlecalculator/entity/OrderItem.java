@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 @Data
 public class OrderItem {
+    private final CustomHelper helper = new CustomHelper();
     private int quantity;
     private String formatCode;
     private List<Bundle> matchedBundles;
@@ -39,7 +40,7 @@ public class OrderItem {
 
     public String listBundle() {
         Map<String, Integer> bundleMap = new HashMap<>();
-        matchedBundles.forEach(bundle -> new CustomHelper().count(bundle.toString(), bundleMap));
+        matchedBundles.forEach(bundle -> helper.count(bundle.toString(), bundleMap));
 
         return bundleMap.keySet().stream().map(bundle -> bundleMap.get(bundle) + " x " + bundle).collect(Collectors.joining(", "));
     }
