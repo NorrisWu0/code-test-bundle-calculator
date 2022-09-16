@@ -5,12 +5,14 @@ import com.norriswu.codetestbundlecalculator.entity.Order;
 import com.norriswu.codetestbundlecalculator.entity.OrderItem;
 import com.norriswu.codetestbundlecalculator.entity.Product;
 import com.norriswu.codetestbundlecalculator.utils.CustomHelper;
+import com.norriswu.codetestbundlecalculator.utils.Logger;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class BundleCalculator {
     public void calculate(Order order, List<Product> products) {
+        Logger.info("Let's find you a good deal.");
         order.getItems().forEach(item -> {
                     products
                             .stream()
