@@ -5,8 +5,8 @@ import com.norriswu.codetestbundlecalculator.utils.Logger;
 import lombok.Data;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Data
@@ -14,7 +14,7 @@ public class OrderItem {
     private final CustomHelper helper = new CustomHelper();
     private int quantity;
     private String formatCode;
-    private List<Bundle> matchedBundles;
+    private Map<Bundle, Integer> bundles;
 
     public OrderItem(String[] orderInfo) {
         try {
@@ -35,14 +35,17 @@ public class OrderItem {
     }
 
     public double getSubTotal() {
-        return matchedBundles.stream().mapToDouble(Bundle::getPrice).sum();
+        AtomicReference<Double> subTotal = new AtomicReference<>((double) 0);
+        bundles.forEach((bundle, quantity) -> {
+            subTotal.updateAndGet(v -> (double) (v + bundle.getPrice() * quantity));
+        });
+
+        return subTotal.get();
     }
 
     public String listBundle() {
-        Map<String, Integer> bundleMap = new HashMap<>();
-        matchedBundles.forEach(bundle -> helper.count(bundle.toString(), bundleMap));
 
-        return bundleMap.keySet().stream().map(bundle -> bundleMap.get(bundle) + " x " + bundle).collect(Collectors.joining(", "));
+        return bundles.keySet().stream().map(bundle -> bundles.get(bundle) + " x " + bundle).collect(Collectors.joining(", "));
     }
 
 }

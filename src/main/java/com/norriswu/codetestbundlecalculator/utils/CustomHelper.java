@@ -2,7 +2,6 @@ package com.norriswu.codetestbundlecalculator.utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class CustomHelper {
     public List<Integer> findBestCombinationOfNumberGivenList(int required, int currentRemaining, List<Integer> list, int startIndex, int currentIndex, List<Integer> currentCombination) {
@@ -37,12 +36,5 @@ public class CustomHelper {
                 nextBundleIndex,
                 combination
         );
-    }
-
-    /**
-     * Shamelessly stolen from <a href="https://stackoverflow.com/questions/15217438/counting-occurrences-of-a-key-in-a-map-in-java">counting-occurrences-of-a-key-in-a-map-in-java</a>
-     */
-    public <K> void count(K key, Map<K, Integer> map) {
-        map.merge(key, 1, (currentCount, notUsed) -> ++currentCount);
     }
 }

@@ -7,7 +7,9 @@ import com.norriswu.codetestbundlecalculator.entity.Product;
 import com.norriswu.codetestbundlecalculator.utils.CustomHelper;
 import com.norriswu.codetestbundlecalculator.utils.Logger;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class BundleCalculator {
@@ -15,21 +17,23 @@ public class BundleCalculator {
 
     public void calculate(Order order, List<Product> products) {
         Logger.info("Let's find you a good deal.");
-        order.getItems().forEach(item -> {
-                    products
-                            .stream()
-                            .filter(product -> product.getFormatCode().equals(item.getFormatCode()))
-                            .findFirst()
-                            .ifPresent(matchedProduct -> item.setMatchedBundles(findBestBundleCombination(item, matchedProduct.getBundles())));
-                }
-        );
+        for (OrderItem item : order.getItems()) {
+            products
+                    .stream()
+                    .filter(product -> product.getFormatCode().equals(item.getFormatCode()))
+                    .findFirst()
+                    .ifPresent(matchedProduct -> item.setBundles(findBestBundleCombination(item, matchedProduct.getBundles())));
+        }
     }
 
-    private List<Bundle> findBestBundleCombination(OrderItem orderItem, List<Bundle> bundles) {
+    private Map<Bundle, Integer> findBestBundleCombination(OrderItem orderItem, List<Bundle> bundles) {
         List<Integer> sizeOfBundles = bundles.stream().map(Bundle::getSize).collect(Collectors.toList());
         List<Integer> bundleIndexCombination = helper.findBestCombinationOfNumberGivenList(orderItem.getQuantity(), orderItem.getQuantity(), sizeOfBundles, 0, 0, List.of());
 
-        return bundleIndexCombination.stream().map(bundles::get).collect(Collectors.toList());
+        Map<Bundle, Integer> bundleMap = new HashMap<>();
+        bundleIndexCombination.forEach(bundleIndex -> bundleMap.merge(bundles.get(bundleIndex), 1, (currentCount, notUsed) -> ++currentCount));
+
+        return bundleMap;
     }
 
 
