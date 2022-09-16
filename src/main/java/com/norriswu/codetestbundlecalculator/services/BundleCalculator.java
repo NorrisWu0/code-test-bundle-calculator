@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class BundleCalculator {
+    private final CustomHelper helper = new CustomHelper();
+
     public void calculate(Order order, List<Product> products) {
         Logger.info("Let's find you a good deal.");
         order.getItems().forEach(item -> {
@@ -25,7 +27,7 @@ public class BundleCalculator {
 
     private List<Bundle> findBestBundleCombination(OrderItem orderItem, List<Bundle> bundles) {
         List<Integer> sizeOfBundles = bundles.stream().map(Bundle::getSize).collect(Collectors.toList());
-        List<Integer> bundleIndexCombination = new CustomHelper().findBestCombinationOfNumberGivenList(orderItem.getQuantity(), orderItem.getQuantity(), sizeOfBundles, 0, 0, List.of());
+        List<Integer> bundleIndexCombination = helper.findBestCombinationOfNumberGivenList(orderItem.getQuantity(), orderItem.getQuantity(), sizeOfBundles, 0, 0, List.of());
 
         return bundleIndexCombination.stream().map(bundles::get).collect(Collectors.toList());
     }
