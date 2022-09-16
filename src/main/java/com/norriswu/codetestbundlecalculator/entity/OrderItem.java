@@ -33,7 +33,7 @@ public class OrderItem {
         return quantity + " " + formatCode;
     }
 
-    public double getTotal() {
+    public double getSubTotal() {
         return matchedBundles.stream().mapToDouble(Bundle::getPrice).sum();
     }
 

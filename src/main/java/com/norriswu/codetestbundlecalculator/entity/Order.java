@@ -1,26 +1,32 @@
 package com.norriswu.codetestbundlecalculator.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.text.NumberFormat;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Getter
-@AllArgsConstructor
 public class Order {
-    private List<OrderItem> items;
+    private final String id;
+    private final List<OrderItem> items;
+
+
+    public Order(List<OrderItem> items) {
+        this.id = UUID.randomUUID().toString();
+        this.items = items;
+    }
 
     @Override
     public String toString() {
-        return items
+        return "Order: " + items
                 .stream()
-                .map(OrderItem::toString).collect(Collectors.joining(", "));
+                .map(OrderItem::toString).collect(Collectors.joining(", ")) + " (id: " + id + ")";
     }
 
-    public void getSummary() {
-        double total = items.stream().mapToDouble(OrderItem::getTotal).sum();
-        return "This order comes in at a whooping " + NumberFormat.getCurrencyInstance().format(total);
+    public double getTotal() {
+        return items.stream().mapToDouble(OrderItem::getSubTotal).sum();
     }
+
+
 }
